@@ -10,6 +10,9 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(401).json({ error: 'Claude API 키가 필요합니다.' })
 
   const { snapshot, targetMonth, geoContext } = req.body
+  if (!snapshot?.rates || !snapshot?.fx || !snapshot?.overseas) {
+    return res.status(400).json({ error: '시장 데이터가 유효하지 않습니다. 페이지를 새로고침 후 다시 시도해주세요.' })
+  }
   const { rates, fx, overseas } = snapshot
 
   const dataContext = `[월간 시장 데이터 — ${targetMonth || snapshot.date} 기준]
